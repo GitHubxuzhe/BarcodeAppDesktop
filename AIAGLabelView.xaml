@@ -1,0 +1,214 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:converter="clr-namespace:BarcodeAppDesktop.Converter"
+    xmlns:properties="clr-namespace:BarcodeAppDesktop.Properties"
+    xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+    xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="BarcodeAppDesktop.UserControls.AIAGLabelView"
+    mc:Ignorable="d"
+    x:Name="AiagLabelViewCtrl"
+    d:DesignHeight="300" d:DesignWidth="300" Width="610" Height="400">
+    <UserControl.Resources>
+        <converter:EnumToVisiblityConverter x:Key="EnumToVisiblityConverter" />
+        <converter:PrecodeConverter x:Key="PrecodeConverter" />
+        <converter:QrStringCatConverter x:Key="QrStringConverter" />
+        <telerik:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <converter:BooleanToStringConverter x:Key="BooleanToString"></converter:BooleanToStringConverter>
+        <telerik:BooleanToVisibilityConverter x:Key="booleanToVisibility"></telerik:BooleanToVisibilityConverter>
+        <Style x:Key="CustomizedRadBarcode128" TargetType="{x:Type telerik:RadBarcode128}">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type telerik:RadBarcode128}">
+                        <Grid x:Name="PART_RadBarcode128" Background="{TemplateBinding Background}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1.1*" />
+                            </Grid.RowDefinitions>
+                            <Path x:Name="RadBarcode128Path" Grid.Column="2" Fill="{TemplateBinding Foreground}"
+                                  Grid.Row="1" Stretch="Fill" />
+                            <Viewbox Grid.Column="2" MinHeight="12" Grid.Row="0">
+                                <TextBlock FontFamily="{TemplateBinding FontFamily}"
+                                           FontSize="{TemplateBinding FontSize}" x:Name="RadBarcode128FullText"
+                                           HorizontalAlignment="Center" MinHeight="12" VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RadBarcode128StylePartNumber" TargetType="{x:Type telerik:RadBarcode128}">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type telerik:RadBarcode128}">
+                        <Grid x:Name="PART_RadBarcode128" Background="{TemplateBinding Background}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Path x:Name="RadBarcode128Path" Grid.Column="2" Fill="{TemplateBinding Foreground}"
+                                  Grid.Row="1" Stretch="Fill" />
+                            <Viewbox Grid.Column="2" MinHeight="12" Grid.Row="0">
+                                <TextBlock FontFamily="{TemplateBinding FontFamily}"
+                                           FontSize="{TemplateBinding FontSize}" x:Name="RadBarcode128FullText"
+                                           HorizontalAlignment="Center" MinHeight="12" VerticalAlignment="Center" />
+                            </Viewbox>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <System:Double x:Key="RectOpacity">0.6</System:Double>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid x:Name="LayoutRoot">
+            <Canvas Height="400" Width="610">
+                <Canvas.Background>
+                    <ImageBrush TileMode="Tile" ImageSource="/BarcodeAppDesktop;component/Images/HonLogo.png" Stretch="None"/>
+                </Canvas.Background>
+                <Rectangle Stroke="#FFAEB4BA" Fill="{Binding Source={x:Static properties:Settings.Default}, Path=LabelBGColor}" Width="610" Height="400" RadiusX="9" RadiusY="0">
+                    
+                </Rectangle>
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="610" Y1="350" Y2="350" X1="0" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="610" Y1="95" Y2="95" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="305" Y1="180" Y2="180" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="305" Y1="95" Y2="350" X1="305" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="610" Y1="145" Y2="145" X1="305" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="610" Y1="220" Y2="220" X1="305" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="305" Y1="265" Y2="265" />
+                <Line Stroke="{StaticResource ColorBoderOfLabel}" X2="610" Y1="250" Y2="250" X1="305" />
+                
+                <Line Visibility="Hidden" Stroke="{StaticResource ColorBoderOfLabel}" X1="465" X2="465" Y1="220" Y2="265" />
+                
+                <telerik:RadBarcode128 x:Name="BarcodePartNumber" Canvas.Left="8" ShowChecksum="false" Width="307"
+                                       Height="90" Style="{DynamicResource RadBarcode128StylePartNumber}"
+                                       FontFamily="Arial" FontSize="24"
+                                       Text="{Binding LabelData.PartNumber, ConverterParameter=P, Converter={StaticResource PrecodeConverter}, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Canvas.Top="3" />
+                <telerik:RadBarcode128 x:Name="BarcodeQuantity" Canvas.Left="30" ShowChecksum="False" Canvas.Top="113"
+                                       Width="246" Height="63"
+                                       Text="{Binding LabelData.Quantity, ConverterParameter=Q, Converter={StaticResource PrecodeConverter}, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Style="{StaticResource CustomizedRadBarcode128}" FontFamily="Arial"
+                                       FontSize="24" />
+                
+                <telerik:RadBarcode128 x:Name="BarcodeVendor" Canvas.Left="30" ShowChecksum="False" Canvas.Top="197"
+                                       Width="246" Height="63"
+                                       Text="{Binding LabelData.Vendor, ConverterParameter=V, Converter={StaticResource PrecodeConverter}, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Style="{StaticResource CustomizedRadBarcode128}" />
+                
+                <telerik:RadBarcode128 x:Name="BarcodeDeliveryNote" Canvas.Left="30" ShowChecksum="false" Width="246"
+                                       Height="63" Style="{DynamicResource RadBarcode128StylePartNumber}"
+                                       FontFamily="Arial" FontSize="24"
+                                       Text="{Binding LabelData.DeliveryNote, ConverterParameter=N, Converter={StaticResource PrecodeConverter}, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Canvas.Top="283" 
+                                       Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=InputPanelType, ConverterParameter=Normal, Converter={StaticResource EnumToVisiblityConverter}, Mode=OneWay}" />
+
+                <telerik:RadBarcode128 x:Name="BarcodeSerialNumber" Canvas.Left="30" ShowChecksum="False" Canvas.Top="283"
+                                       Width="246" Height="63"
+                                       Text="{Binding LabelData.SN, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Style="{StaticResource CustomizedRadBarcode128}"  Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=InputPanelType, ConverterParameter=FG, Converter={StaticResource EnumToVisiblityConverter}, Mode=OneWay}" />
+
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Text="{StaticResource Label_Quantity}" Height="15"
+                           Canvas.Top="96" Width="128" Canvas.Left="8" />
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Text="{StaticResource Label_Vendor}" Height="15"
+                           Canvas.Top="181" Width="128" Canvas.Left="8" />
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Text="{StaticResource Label_DeliveryNote}" Height="15"
+                           Canvas.Top="267" Width="128" Canvas.Left="8"
+                           Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=InputPanelType, ConverterParameter=Normal, Converter={StaticResource EnumToVisiblityConverter}, Mode=OneWay}" />
+                
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Height="15" Canvas.Top="266" Width="128"
+                	Canvas.Left="8" Text="Serial Number"  Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=InputPanelType, ConverterParameter=FG, Converter={StaticResource EnumToVisiblityConverter}, Mode=OneWay}"/>
+                
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Height="15" Canvas.Top="94" Width="128"
+                           Canvas.Left="314" Text="{StaticResource Label_ProductDescription}" />
+                <TextBlock FontFamily="Segoe UI" FontSize="23" Height="34" Canvas.Top="108" Width="276"
+                           Canvas.Left="324" Text="{Binding LabelData.Description, ValidatesOnNotifyDataErrors=False}" />
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Height="15" Canvas.Top="145" Width="128"
+                           Canvas.Left="314" Text="ASN" />
+                <telerik:RadBarcode128 x:Name="BarcodeAsn" Canvas.Left="314" ShowChecksum="False" Canvas.Top="155"
+                                       Width="286" Height="55"
+                                       Text="{Binding LabelData.DeliveryNoteOrAsn, ConverterParameter=5K, Converter={StaticResource PrecodeConverter}, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Style="{StaticResource CustomizedRadBarcode128}" />
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Height="15" Canvas.Top="220" Width="128"
+                           Canvas.Left="314" Text="Date" />
+                <TextBlock x:Name="TxtDeliveryDate" FontFamily="Segoe UI" FontSize="13" Height="20"
+                           Canvas.Top="225" Width="189" Canvas.Left="378"
+                           Text="{Binding LabelData.DeliveryDate, StringFormat=yyyy-MM-dd, ValidatesOnNotifyDataErrors=False}" />
+                <TextBlock x:Name="ConsignmentText" Text="{Binding LabelData.IsConsignment, Converter={StaticResource BooleanToString}, ConverterParameter=K }" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="64" FontWeight="Bold" Canvas.Left="524" Height="67" Width="68" Canvas.Top="14"/>
+                <TextBlock Text="{Binding LabelData.IsPQA, Converter={StaticResource BooleanToString}, ConverterParameter=Q}" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Arial" FontSize="64" FontWeight="Bold" Canvas.Left="452" Height="67" Width="68" Canvas.Top="14"/>
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Height="15" Canvas.Top="253" Width="128"
+                	Canvas.Left="314" Text="MHS Container ID" />
+               
+                <telerik:RadBarcode128 x:Name="BarcodeIdContainer" Canvas.Left="340" ShowChecksum="False" Canvas.Top="270"
+                                       Width="246" Height="60"
+                                       Text="{Binding LabelData.IdContainer, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"
+                                       Style="{StaticResource CustomizedRadBarcode128}" />
+
+               
+
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Text="Quality Status" Height="15"
+                	Canvas.Top="350" Width="72" Canvas.Left="8"
+                    Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=EnableQualityStatus, Converter={StaticResource BooleanToVisibility}}" />
+
+                <TextBlock FontFamily="Segoe UI" FontSize="11" Text="Storage Bin" Height="15"
+                	Canvas.Top="350" Width="72" Canvas.Left="314"
+                    Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=EnableSAPStorageBin, Converter={StaticResource BooleanToVisibility}}" />
+
+                <TextBlock x:Name="TxtSAPStorageBin" 
+                           FontFamily="Segoe UI" 
+                           FontSize="20" 
+                           Height="30"
+                           Canvas.Top="360" 
+                           Width="120" 
+                           Canvas.Left="380"
+                           Text="{Binding LabelData.SAPStorageBin, ValidatesOnNotifyDataErrors=False}" />
+                
+                <!--                <telerik:RadBarcode128 x:Name="SAPStorageBin"-->
+<!--                                       Canvas.Top="350"-->
+<!--                                       Canvas.Left="80" -->
+<!--                                       ShowChecksum="False" -->
+<!--                                       Width="130" -->
+<!--                                       Height="46"-->
+<!--                                       Text="{Binding LabelData.SAPStorageBin, ElementName=AiagLabelViewCtrl, Mode=OneWay, ValidatesOnNotifyDataErrors=False}"-->
+<!--                                       Style="{StaticResource CustomizedRadBarcode128}"-->
+<!--                                       Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=EnableSAPStorageBin, Converter={StaticResource BooleanToVisibility}}"/>-->
+
+            </Canvas>
+            <telerik:RadBarcodeQR x:Name="Qr" Margin="339,-6,160,296" Version="5" Width="Auto" Height="110"
+                                  ErrorCorrectionLevel="L">
+                <telerik:RadBarcodeQR.Text>
+                    <MultiBinding Converter="{StaticResource QrStringConverter}" FallbackValue="1"
+                                  ValidatesOnNotifyDataErrors="False">
+                        <Binding ElementName="BarcodePartNumber" Path="Text" FallbackValue="1" />
+                        <Binding ElementName="BarcodeQuantity" Path="Text" FallbackValue="1" />
+                        <Binding ElementName="BarcodeVendor" Path="Text" FallbackValue="1" />
+                        <Binding ElementName="BarcodeAsn" Path="Text" FallbackValue="1" />
+                        <Binding ElementName="TxtDeliveryDate" Path="Text" FallbackValue="1" />
+                        <Binding ElementName="ConsignmentText" Path="Text" FallbackValue="1" />
+                        <Binding ElementName="BarcodeDeliveryNote" Path="Text" FallbackValue="1" />
+                    </MultiBinding>
+                </telerik:RadBarcodeQR.Text>
+            </telerik:RadBarcodeQR>
+        </Grid>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,210 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+      xmlns:viewModel="clr-namespace:BarcodeAppDesktop.ViewModel"
+      xmlns:converter="clr-namespace:BarcodeAppDesktop.Converter"
+      xmlns:userControls="clr-namespace:BarcodeAppDesktop.UserControls"
+      xmlns:l="http://wpflocalizeextension.codeplex.com"
+      xmlns:model="clr-namespace:BarcodeAppDesktop.Model"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Custom="http://www.galasoft.ch/mvvmlight" xmlns:Helper="clr-namespace:BarcodeAppDesktop.Helper"
+      l:ResxLocalizationProvider.DefaultAssembly="BarcodeAppDesktop"
+      l:ResxLocalizationProvider.DefaultDictionary="Resources"
+      x:Class="BarcodeAppDesktop.View.ContainerSearch"
+      mc:Ignorable="d"
+      d:DesignHeight="537" d:DesignWidth="1024"
+      Title="ContainerSearch">
+    <Page.Resources>
+        <converter:SelectedItemToLabelDataConverter x:Key="SelectedItemToLabelDataConverter"/>
+        <DataTemplate x:Key="GridViewRowDetailsTemplate">
+            <Grid Margin="2" d:DesignWidth="373.923" d:DesignHeight="70.84" Background="{DynamicResource ColorLabelBk}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="16*"/>
+                    <RowDefinition Height="55*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Margin="0,0,0,2" Text="Lot Details" FontSize="15" FontWeight="Bold" Background="{DynamicResource TitleBarFillColor}" Foreground="White"/>
+                <Grid Grid.RowSpan="1" Grid.Row="1" ShowGridLines="False">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="87"/>
+                        <ColumnDefinition Width="118"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="19*"/>
+                        <RowDefinition Height="21*"/>
+                        <RowDefinition Height="21*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Margin="1" Grid.Column="0" Text="Lot Id: " FontSize="11" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="0" Margin="1" Grid.Column="1" Text="{Binding LotId}" Grid.ColumnSpan="1"/>
+                    <TextBlock Grid.Row="1" Margin="1" Grid.Column="0" Text="SAPIR: " FontWeight="Bold" FontSize="11"  />
+                    <TextBlock Grid.Row="1" Margin="1" Grid.Column="1" Text="{Binding SAPIR}" Grid.ColumnSpan="1" />
+                    <TextBlock Grid.Row="2" Margin="1" Grid.Column="0" Text="Package Qty:" FontWeight="Bold" FontSize="11" />
+                    <TextBox Margin="1" Grid.Row="2" Background="Khaki"  Grid.Column="1" MaxLength="5" Text="{Binding Quantity, Mode=TwoWay, Source={x:Static converter:SelectedItemToLabelDataConverter.LabelData}, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Behaviors>
+                            <Helper:TextBoxFilterBehavior LegalChars="1234567890"/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBlock Margin="1"  Grid.Row="0" Grid.Column="2" Text="Associated Qty:" FontSize="11" FontWeight="Bold"/>
+                    <TextBlock Margin="1"  Grid.Row="0" Grid.Column="3" Text="{Binding QtyDone}"/>
+                    <TextBlock Margin="1"  Grid.Row="1" Grid.Column="2" Text="SAP GR Done:" FontSize="11" FontWeight="Bold"/>
+                    <TextBlock Margin="1"  Grid.Row="1" Grid.Column="3" Text="{Binding SAPGRDone}"/>
+                    <TextBlock Margin="1"  Grid.Row="2" Grid.Column="2" Text="Num Of Label:" FontSize="11" FontWeight="Bold"/>
+                    <TextBox Margin="1" Background="Khaki" Grid.Row="2" Grid.Column="3" MaxLength="3" Text="{Binding NumOfPCs, Mode=TwoWay, Source={x:Static converter:SelectedItemToLabelDataConverter.LabelData}, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Behaviors>
+                            <Helper:TextBoxFilterBehavior LegalChars="1234567890"/>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Page.DataContext>
+        <viewModel:ContainerSearchViewModel />
+    </Page.DataContext>
+    <Grid x:Name="LayoutRoot" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="610"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Style="{StaticResource RectangleStyle}" Height="32" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Width="610"/>
+        <TextBlock TextAlignment="Center" FontSize="21" VerticalAlignment="Top" HorizontalAlignment="Center" Height="32" Foreground="White" Text="{l:Loc Key=ManulInput_LabelView_Title}" Width="163" Grid.Row="0" Grid.Column="0" />
+
+        <Rectangle Grid.Column="2" Grid.Row="0" Style="{StaticResource RectangleStyle}" Height="32" VerticalAlignment="Top"/>
+        <TextBlock TextAlignment="Center" FontSize="21" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="32" Foreground="White" Text="{l:Loc ContainerSearch_Title}" Grid.Row="0" Grid.Column="2" />
+
+        <userControls:AIAGLabelView Grid.Column="0" Grid.Row="1" LabelData="{Binding LabelData}" x:Name="AiagLabelView" Height="Auto" Width="610" VerticalAlignment="Top"  HorizontalAlignment="Left"/>
+
+        <Grid  Height="340" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            
+            <TextBlock x:Name="tbIdContainer" Text="{l:Loc LabelInput_IdContainer}" FontFamily="Segoe UI Semibold"
+                       FontSize="15" Foreground="Black" HorizontalAlignment="Left" Width="200" Height="21"
+                       VerticalAlignment="Top"
+                       Margin="10,0,0,0"
+                       TextOptions.TextFormattingMode="Display" Grid.Row="0" Grid.Column="0" />
+            
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <TextBox x:Name="txtIdContainer" 
+                     Margin="10, 20, 10, 10" 
+                     Background="Khaki" 
+                     Height="30"
+                     Width="140"
+                     Helper:FocusExtension.IsFocused="{Binding ReadyToScan}"
+                     MaxLength="13" 
+                     FontSize="15"
+                     Text="{Binding IdContainer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Behaviors>
+                        <Helper:TextBoxFilterBehavior LegalChars="1234567890"/>
+                    </i:Interaction.Behaviors>
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding ShowContainerInfoCommand, Mode=OneWay}" 
+                                CommandParameter="{Binding ElementName=LayoutRoot}" 
+                                Key="Enter" />
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <Button VerticalAlignment="Center" 
+                        Command="{Binding ShowContainerInfoCommand}"
+                        CommandParameter="{Binding ElementName=LayoutRoot}" 
+                        HorizontalAlignment="left"
+                        Content="{l:Loc Search}"
+                        Height="30" 
+                        Width="70"
+                        Margin="0,10,0,0"
+                        Background="#25A0DA"
+                        Foreground="White"
+                        FontSize="10" />
+            </StackPanel>
+
+
+
+            <TextBlock x:Name="tbQuantity" Text="{l:Loc LabelInput_Quantity}" FontFamily="Segoe UI Semibold"
+                       FontSize="15" Foreground="Black" HorizontalAlignment="Left" Width="200" Height="21"
+                       VerticalAlignment="Top"
+                       Margin="10,0,0,0"
+                       TextOptions.TextFormattingMode="Display" Grid.Row="1" Grid.Column="0" />
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                <TextBox x:Name="txtQuantity" 
+                     Margin="10, 20, 10, 10" 
+                     Background="Khaki" 
+                     Height="30" 
+                     Width="70"
+                     MaxLength="6" 
+                     FontSize="14"
+                     Text="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Behaviors>
+                        <Helper:TextBoxFilterBehavior LegalChars="1234567890"/>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+            </StackPanel>
+            
+
+            <!--<TextBlock FontFamily="Segoe UI" 
+                       Text="{Binding IdContainerValue}" 
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       FontSize="40"/>-->
+
+
+
+            <TextBlock x:Name="tbNumberOfLabels" Text="{l:Loc LabelInput_NumberOfLabels}" FontFamily="Segoe UI Semibold"
+                       FontSize="15" Foreground="Black" HorizontalAlignment="Left" Width="250" Height="21"
+                       VerticalAlignment="Top"
+                       Margin="10,0,0,0"
+                       TextOptions.TextFormattingMode="Display" Grid.Row="2" Grid.Column="0" />
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+                <TextBox x:Name="txtNumberOfLabels" 
+                     Margin="10, 20, 10, 10" 
+                     Background="Khaki" 
+                     Height="30" 
+                     Width="70"
+                     Grid.Row="1" 
+                     MaxLength="2" 
+                     FontSize="14"
+                     Text="{Binding NumberOfLabels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Behaviors>
+                        <Helper:TextBoxFilterBehavior LegalChars="1234567890"/>
+                    </i:Interaction.Behaviors>
+                </TextBox>
+            </StackPanel>
+            <TextBlock FontFamily="Segoe UI" 
+                       Text="{Binding Status}" 
+                       Grid.Row="3" 
+                       Grid.Column="0"
+                       FontSize="15"
+                       Foreground="Red"/>
+            <!--<Button VerticalAlignment="Center" 
+                        Command="{Binding PrintCommand}"
+                        HorizontalAlignment="left"
+                        Content="{l:Loc Print}"
+                        Height="30" 
+                        Width="140"
+                        Margin="10, 20, 10, 10" 
+                        Background="#25A0DA"
+                        Foreground="White"
+                        FontSize="10" Grid.Row="3" Grid.Column="0" />-->
+        </Grid>
+       
+
+    </Grid>
+</Page>
